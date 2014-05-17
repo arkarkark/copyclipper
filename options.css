@@ -1,0 +1,170 @@
+body {
+  font-family: 'Lucida Grande', sans-serif;
+  font-size: 75%;
+  padding-top: 20px;
+  margin: 0;
+}
+
+#navigation-container {
+  height: 100%;
+  left: 0;
+  margin-top: -20px;
+  position: absolute;
+  right: 15px;
+  width: 155px;
+  z-index: 3;
+}
+
+.tab-content {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  -webkit-margin-start: 155px;
+  display: none;
+}
+
+#navigation-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#navigation-container li {
+  -webkit-border-start: 6px solid transparent;
+  -webkit-padding-start: 18px;
+  -webkit-user-select: none;
+  display: list-item;
+  text-align: -webkit-match-parent;
+}
+
+#navigation-container li.selected {
+  -webkit-border-start-color: rgb(78, 87, 100);
+  cursor: default;
+  pointer-events: none;
+}
+
+
+#navigation-container button {
+  background-color: white;
+  border: 0;
+  color: #999;
+  cursor: pointer;
+  font: inherit;
+  line-height: 29px;
+  margin: 0;
+  padding: 0;
+  -webkit-box-align: center;
+  text-align: center;
+  box-sizing: border-box;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+  display: inline-block;
+  -webkit-appearance: button;
+}
+
+#navigation-container h1 {
+  font-size: 1.5em;
+  font-weight: normal;
+  -webkit-margin-after: 1em;
+  -webkit-margin-before: 21px;
+  -webkit-margin-start: 23px;
+  color: #5C6166;
+}
+
+#navigation-container .selected > button {
+  color: #464E5A;
+}
+
+
+#navigation-container #resetNavItem {
+  margin-top: 27px;
+}
+
+#navigation-container #closeNavItem {
+  margin-top: 27px;
+}
+
+
+.tab-content h1 {
+  margin: 0;
+  padding: 23px 0 13px;
+  font-size: 1.5em;
+  -webkit-user-select: none;
+  font-weight: normal;
+  line-height: 1;
+}
+
+
+.tab-content h1::after {
+-webkit-margin-end: 20px;
+background-color: #EEE;
+content: ' ';
+display: block;
+height: 1px;
+position: relative;
+top: 13px;
+}
+
+#patterns {
+  padding-top: 13px;
+}
+
+#patterns th {
+  text-align: left;
+}
+
+
+input.search {
+  width: 40em;
+}
+
+input.replace {
+
+}
+
+#patternsContainer {
+  display: block;
+}
+
+#defaults {
+  margin-top: 2em;
+}
+
+#clipboardDisplay {
+  margin-top: 2em;
+  font-size: 8pt;
+}
+
+#clipboardDisplay td {
+  vertical-align: top;
+}
+
+#clipboardDisplayValue {
+  width: 100%;
+}
+
+#regexes {
+  margin-top: 2em;
+  width: 90%;
+  height: 60%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.almost-full-width {
+  width: 90%;
+}
+
+#tests li {
+  display: block;
+}
+
+#testTable {
+  font-size: 75%;
+}

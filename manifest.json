@@ -1,0 +1,20 @@
+{
+  "name": "Copy Clipper",
+  "version": "2.1.0",
+  "manifest_version": 2,
+  "description": "Trim urls copied to the clipboard to make them shorter.",
+  "background": { "page": "background.html" },
+  "options_page": "options.html",
+  "permissions": [
+    "background",
+    "clipboardRead",
+    "clipboardWrite",
+    "notifications",
+    "storage"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}

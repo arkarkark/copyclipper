@@ -1,0 +1,89 @@
+<html>
+<head><title>Copy Clipper Extension Options</title>
+<link rel="stylesheet" type="text/css" href="options.css">
+<script type="text/javascript" src="options.js"></script>
+</head>
+<body>
+<div id="navigation-container">
+<h1>Copy Clipper</h1>
+
+<ul>
+  <li class="selected"><button id="patternsButton">Patterns</button></li>
+  <li><button id="testingButton">Testing</button></li>
+  <!-- li><button>Import/Export</button></li -->
+  <li id="closeNavItem"><button id="close">Close</button></li>
+</ul>
+</div>
+
+<div class="tab-content" id="patternsContainer">
+<h1>Patterns</h1>
+
+<textarea id="regexes" wrap="off"></textarea><br>
+
+<button id="save">Save</button><span id="status"></span>
+
+<p>Format is
+<code><b>!</b>search_regex<b>!</b>replace<b>!</b>regexp_options</code><br>
+(regexp_options can be g,m,i for global, multiline and case insensitive)<br>
+# comments are allowed (start a line with #)
+</p>
+
+<table id="testTable">
+  <tr>
+    <td>Input:</td>
+    <td class="full-width"><input class="almost-full-width" id="input" type="text"></td>
+  </tr>
+  <tr>
+    <td>Output:</td>
+    <td><span id="output"</td>
+  </tr>
+</table>
+
+<p>Enter some text above in <label for="input">"Input"</label> and as you edit the patterns box the "Output" line will be updated.</p>
+
+</div>
+<div class="tab-content" id="notificationsContainer">
+TODO(ark)
+<label>
+  Show Notificaitons
+  <input type="checkbox" id="showNotifications">
+</label>
+
+<label>
+  Show Icon
+  <input type="checkbox" id="showIcon">
+</label>
+
+<label>
+  Notificaiton Timeout
+  <input type="checkbox" id="notificationTimeout"> Seconds
+</label>
+</div>
+
+<div class="tab-content" id="testingContainer">
+<h1>Testing</h1>
+
+Click on one of these links to have it copied to the clipboard.
+
+<ul id="tests">
+  <li>http://www.youtube.com/watch?v=OQwD0QCbxaA&amp;feature=my_favorites</li>
+  <li>https://www.google.com/search?tbm=isch&amp;q=simon%27s%20cat&amp;biw=1228&amp;bih=662&amp;sei=z6xCUJ6ZLsmYiQKV-oCQDA</li>
+  <li>http://www.amazon.com/Simons-Cat-Simon-Tofield/dp/0446560065/ref=sr_1_1?ie=UTF8&amp;qid=1346546858&amp;sr=8-1&amp;keywords=simons+cat</li>
+  <li>http://www.amazon.com/gp/product/B0083PWAPW/ref=nav_swm_kndl_grphc?pf_rd_m=ATVPDKIKX0DER&amp;pf_rd_s=nav-sitewide-msg&amp;pf_rd_r=0PAK48BVD07GRNXS1M8V&amp;pf_rd_t=4201&amp;pf_rd_p=1395779662&amp;pf_rd_i=navbar-4201</li>
+  <li>https://picasaweb.google.com/lh/photo/iUUL_4qNfrpKWddcHy8xY8sntR_6XDXqGKWaVo17JHs?feat=directlink</li>
+</ul>
+
+<table id="clipboardDisplay">
+  <tr>
+    <td>Clipboard&nbsp;Value:</td>
+    <td id="clipboardDisplayValue"><div id="clipboardValue"></div></td>
+  </tr>
+  <tr>
+    <td>Original&nbsp;Value:</td>
+    <td><div id="clipboardValueOriginal"></div></td>
+  </tr>
+</table>
+
+</div>
+</body>
+</html>
