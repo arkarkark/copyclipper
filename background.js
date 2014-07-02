@@ -37,6 +37,9 @@ copyclipper.DEFAULT_REGEXES = [
   '# End Default Patterns',
 ];
 
+/** How long to wait before the Chrome notification disappears. */
+copyclipper.NOTIFICATION_TIMEOUT = 4000;
+
 /** Is an object empty.
  * @param {Object} obj the object to check.
  * @return {bool} true if object has properties.
@@ -188,6 +191,7 @@ copyclipper.clipboardValueOriginal = '';
 // Check the clipboard every second, if anything changed copyclip/filter it.
 copyclipper.intervalId = window.setInterval(copyclipper.pollClipboard, 1000);
 
+copyclipper.notificationTimer = null;
 
 copyclipper.createNotification = function() {
 
@@ -197,7 +201,7 @@ copyclipper.createNotification = function() {
     desciption = '\n\nUnclipped from:\n';
   }
 
-  chrome.notifications.getAll(copyclipper.clearNotifications);
+  copyclipper.clearNotifications();
 
   chrome.notifications.create('',
                               {
@@ -209,12 +213,21 @@ copyclipper.createNotification = function() {
                                 iconUrl: 'icon48.png',
                                 buttons: [{title: 'Undo'}]},
                               function(notificationId) {});
+
+  if (copyclipper.notificationTimer != null) {
+    clearTimeout(copyclipper.notificationTimer);
+  }
+  copyclipper.notificationTimer = setTimeout(copyclipper.clearNotifications,
+                                             copyclipper.NOTIFICATION_TIMEOUT);
+
 };
 
-copyclipper.clearNotifications = function(notificationIds) {
-  for (var notificationId in notificationIds) {
-    chrome.notifications.clear(notificationId, function(wasCleared) {});
-  }
+copyclipper.clearNotifications = function() {
+  chrome.notifications.getAll(function(notificationIds) {
+    for (var notificationId in notificationIds) {
+      chrome.notifications.clear(notificationId, function(wasCleared) {});
+    }
+  });
 };
 
 copyclipper.notificationButtonClicked = function(notificationId, buttonIndex) {
