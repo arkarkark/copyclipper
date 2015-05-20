@@ -1,6 +1,6 @@
 {
   "name": "Copy Clipper",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "manifest_version": 2,
   "description": "Trim urls copied to the clipboard to make them shorter.",
   "background": { "page": "background.html" },
