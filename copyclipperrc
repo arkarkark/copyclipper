@@ -1,0 +1,21 @@
+# -*- Python -*-
+{"patterns": [
+  {"search": r"^https?([a-z0-9:/.]*amazon[^/]*/(gp/product|([^/]*/)?dp)/[^/]*).*$", "replace": r"https\1"},
+# ], "notpatterns": [
+  {"search": r"^http.*youtube.*[&?]v=([^&]*).*?((#t=.*)?)$", "replace": r"https://youtu.be/\1\2"},
+  {"search": r"^(http.*)?feat=directlink$", "replace": r"\1"},
+  {"search": r"^(http.*)?source=rss$", "replace": r"\1"},
+  {"search": r"^(http.*)?_r=1$", "replace": r"\1"},
+  {"search": r"^(http.*)?utm_source=[^#]*", "replace": r"\1"},
+  {"search": r"^http.*google.*search.*[?&]tbm=isch&q=([^&]*).*$",
+   "replace": r"https://www.google.com/search?tbm=isch&q=\1"},
+  # Uncomment this next line (remove the #) if you feel brave"},
+  {"search": r"/index.(php|s?html|asp)$", "replace": "/"},
+  {"search": r"^https://code.google.com/p/chromium/issues/detail\?([^&]*&)*id=(\d+).*$",
+   "replace": r"https://crbug.com/\2"},
+  {"search": r"\?fromListing=listing", "replace": ""},
+  {"search": r"^(http.*imdb.com.*?)/?\?.*", "replace": r"\1"},
+  {"search": r"\?mt=[0-9]+", "replace": ""},
+  {"search": r"[\?&]$", "replace": ""},
+]
+}
