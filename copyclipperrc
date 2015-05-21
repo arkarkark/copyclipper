@@ -1,21 +1,34 @@
 # -*- Python -*-
+# Originally from https://github.com/arkarkark/copyclipper/blob/master/copyclipperrc
+# This is the config for copyclipper. It's a python dict with one key "patterns"
+# patterns is an array of pattern dict, each pattern dict has a "search" key and an optional replace key
+# the search key is a python regex that will cause the pattern to trigger
+# replace is the regex subst value to use when you match search
+# if replace is missing we will use \1 which matches the first ()'d bit in search.
 {"patterns": [
-  {"search": r"^https?([a-z0-9:/.]*amazon[^/]*/(gp/product|([^/]*/)?dp)/[^/]*).*$", "replace": r"https\1"},
-# ], "notpatterns": [
-  {"search": r"^http.*youtube.*[&?]v=([^&]*).*?((#t=.*)?)$", "replace": r"https://youtu.be/\1\2"},
-  {"search": r"^(http.*)?feat=directlink$", "replace": r"\1"},
-  {"search": r"^(http.*)?source=rss$", "replace": r"\1"},
-  {"search": r"^(http.*)?_r=1$", "replace": r"\1"},
-  {"search": r"^(http.*)?utm_source=[^#]*", "replace": r"\1"},
+  {"search": r"^http.*youtube.*[&?]v=([^&]*).*?((#t=.*)?)$",
+   "replace": r"https://youtu.be/\1\2"},
   {"search": r"^http.*google.*search.*[?&]tbm=isch&q=([^&]*).*$",
    "replace": r"https://www.google.com/search?tbm=isch&q=\1"},
-  # Uncomment this next line (remove the #) if you feel brave"},
-  {"search": r"/index.(php|s?html|asp)$", "replace": "/"},
+  {"search": r"^https?[a-z0-9:/.]*amazon[^/]*/((gp/product|([^/]*/)?dp)/[^/]*).*$",
+   "replace": r"https://smile.amazon.com/\1"},
   {"search": r"^https://code.google.com/p/chromium/issues/detail\?([^&]*&)*id=(\d+).*$",
    "replace": r"https://crbug.com/\2"},
-  {"search": r"\?fromListing=listing", "replace": ""},
-  {"search": r"^(http.*imdb.com.*?)/?\?.*", "replace": r"\1"},
-  {"search": r"\?mt=[0-9]+", "replace": ""},
-  {"search": r"[\?&]$", "replace": ""},
+  {"search": r"^(http.*imdb.com.*?)/?\?.*"},
+  {"search": r"(http.*/)\?fromListing=listing"},
+  {"search": r"(http.*/)\?mt=[0-9]+"},
+  {"search": r"(http.*)[?&]$"},
+  {"search": r"(http.*/)\?feat=directlink$"},
+  {"search": r"(http.*/)\?source=rss$"},
+  {"search": r"^(http.*)\?_r=1$"},
+  {"search": r"^(http.*)\?utm_(source|medium|campaign)=[^#]*"},
+  # Uncomment this next line (remove the #) if you feel brave"},
+  {"search": r"(http.*/)index.(php|s?html|[aj]sp)$"},
+#
+#
+# You add all YOUR stuff below this line and I'll add all mine above and we'll never conflict.
+# You can send me pull requests with useful stuff added above and hopefully I'll like it.
+#
+#
 ]
 }

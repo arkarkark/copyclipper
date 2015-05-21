@@ -64,22 +64,50 @@ def Copy(string):
   board.declareTypes_owner_([AppKit.NSStringPboardType], None)  # pylint: disable=no-member
   board.setData_forType_(new_data, AppKit.NSStringPboardType)  # pylint: disable=no-member
 
+
+config_file_name_memo = None  # pylint: disable=invalid-name
+
+def ConfigFileName():
+  global config_file_name_memo  # pylint: disable=invalid-name,global-statement
+  if config_file_name_memo is None:
+    config_file_name_memo = os.path.expanduser(args.file)
+    if not os.path.exists(config_file_name_memo):
+      config_file_name_memo = os.path.join(os.path.dirname(__file__), "copyclipperrc")
+  return config_file_name_memo
+
+config_mtime = 0  # pylint: disable=invalid-name
+config_memo = None  # pylint: disable=invalid-name
+
 def LoadConfig():
+  """Load the config file if it hasn't been loaded yet or has been modified."""
+  # TODO(ark): maybe use MacFSEvent
+  global config_memo, config_mtime  # pylint: disable=invalid-name,global-statement
+  config_file_name = ConfigFileName()
+  config_last_modified = os.path.getmtime(config_file_name)
+  if config_memo is None or config_last_modified > config_mtime:
+    config_mtime = config_last_modified
+    config_memo = LoadConfigFile(config_file_name)
+  return config_memo
+
+def LoadConfigFile(config_file_name):
   """Load up ~/.copyclipperrc"""
-  file_name = os.path.expanduser(args.file)
-  console.info("Loading: %r", file_name)
-  config = ast.literal_eval(open(file_name).read())
+  console.info("Loading Config: %r", config_file_name)
+  config = ast.literal_eval(open(config_file_name).read())
 
   for pattern in config["patterns"]:
     console.debug("Compiling: %r", pattern["search"])
     pattern["search"] = re.compile(pattern["search"])
-
   return config
 
-def ProcessValue(patterns, value):
+def ProcessValue(config, value):
   """Loop over all patterns and try and search replacey."""
+  patterns = config["patterns"]
   for pattern in patterns:
-    value = pattern["search"].sub(pattern["replace"], value)
+    if "replace" in pattern:
+      replace = pattern["replace"]
+    else:
+      replace = r"\1"
+    value = pattern["search"].sub(replace, value)
 
   return value
 
@@ -127,14 +155,16 @@ def StartServer(port):
   t.daemon = True
   t.start()
 
-def WatchClipboard(config):
+def WatchClipboard():
   """Monitor the clipboard for changes."""
-  global last_value, original_value
+  global last_value, original_value  # pylint: disable=invalid-name,global-statement
 
   if args.port:
     StartServer(int(args.port))
 
   while True:
+    config = LoadConfig()
+
     new_value = Paste()
     if new_value and (last_value is None or new_value != last_value):
       console.debug("n/l/o: %15s %15s %15s",
@@ -144,7 +174,7 @@ def WatchClipboard(config):
         last_value = original_value
       else:
         console.debug("Clipboard: %s", new_value)
-        processed_value = ProcessValue(config["patterns"], new_value)
+        processed_value = ProcessValue(config, new_value)
         if processed_value != new_value:
           console.info("Clipped: %s", processed_value)
           Notify("Clipped: %s" % processed_value)
@@ -157,7 +187,7 @@ def WatchClipboard(config):
 
 def Main():
   """Main."""
-  WatchClipboard(LoadConfig())
+  WatchClipboard()
 
 if __name__ == "__main__":
   Main()
