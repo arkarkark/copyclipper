@@ -175,7 +175,6 @@ copyclipper.copyclip = function() {
   }
 };
 
-
 /** Called every second to see if the clipboard has changed. */
 copyclipper.pollClipboard = function() {
   var val = copyclipper.getClipboardContents();
@@ -188,8 +187,13 @@ copyclipper.restoreRegexes();
 copyclipper.clipboardValue = '';  // the last value we saw
 copyclipper.clipboardValueOriginal = '';
 
-// Check the clipboard every second, if anything changed copyclip/filter it.
-copyclipper.intervalId = window.setInterval(copyclipper.pollClipboard, 1000);
+if (chrome.clipboard && chrome.clipboard.onClipboardDataChanged) {
+  // use new api https://developer.chrome.com/apps/clipboard
+  chrome.clipboard.onClipboardDataChanged(copyclipper.pollClipboard)
+} else {
+  // Check the clipboard every second, if anything changed copyclip/filter it.
+  copyclipper.intervalId = window.setInterval(copyclipper.pollClipboard, 1000);
+}
 
 copyclipper.notificationTimer = null;
 

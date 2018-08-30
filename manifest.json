@@ -1,20 +1,17 @@
 {
-  "name": "Copy Clipper",
-  "version": "2.1.1",
-  "manifest_version": 2,
-  "description": "Trim urls copied to the clipboard to make them shorter.",
-  "background": { "page": "background.html" },
-  "options_page": "options.html",
-  "permissions": [
-    "background",
-    "clipboardRead",
-    "clipboardWrite",
-    "notifications",
-    "storage"
-  ],
-  "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
-  }
+   "background": {
+      "page": "background.html"
+   },
+   "description": "Trim urls copied to the clipboard to make them shorter.",
+   "icons": {
+      "128": "icon128.png",
+      "16": "icon16.png",
+      "48": "icon48.png"
+   },
+   "manifest_version": 2,
+   "name": "Copy Clipper",
+   "options_page": "options.html",
+   "permissions": [ "background", "clipboardRead", "clipboardWrite", "notifications", "storage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.3.0"
 }
