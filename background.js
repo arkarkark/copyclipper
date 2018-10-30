@@ -187,9 +187,9 @@ copyclipper.restoreRegexes();
 copyclipper.clipboardValue = '';  // the last value we saw
 copyclipper.clipboardValueOriginal = '';
 
-if (chrome.clipboard && chrome.clipboard.onClipboardDataChanged) {
+if (((chrome.clipboard || {}).onClipboardDataChanged || {}).addListener) {
   // use new api https://developer.chrome.com/apps/clipboard
-  chrome.clipboard.onClipboardDataChanged(copyclipper.pollClipboard)
+  chrome.clipboard.onClipboardDataChanged.addListener(copyclipper.pollClipboard)
 } else {
   // Check the clipboard every second, if anything changed copyclip/filter it.
   copyclipper.intervalId = window.setInterval(copyclipper.pollClipboard, 1000);
