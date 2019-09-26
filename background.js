@@ -187,7 +187,27 @@ copyclipper.restoreRegexes();
 copyclipper.clipboardValue = '';  // the last value we saw
 copyclipper.clipboardValueOriginal = '';
 
-if (((chrome.clipboard || {}).onClipboardDataChanged || {}).addListener) {
+/*
+navigator.permissions.query({
+  name: 'clipboard-read'
+}).then(permissionStatus => {
+  // Will be 'granted', 'denied' or 'prompt':
+  console.log(permissionStatus.state);
+
+  // Listen for changes to the permission state
+  permissionStatus.onchange = () => {
+    console.log(permissionStatus.state);
+  };
+});
+*/
+
+function getChromeVersion () {
+  var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+  return raw ? parseInt(raw[2], 10) : false;
+}
+
+if (getChromeVersion() > 69 && ((chrome.clipboard || {}).onClipboardDataChanged || {}).addEventListener) {
+  console.log("FINALLY USING NEW onClipboardDataChanged API!")
   // use new api https://developer.chrome.com/apps/clipboard
   chrome.clipboard.onClipboardDataChanged.addListener(copyclipper.pollClipboard)
 } else {
