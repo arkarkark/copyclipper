@@ -5,7 +5,7 @@ ZIP_EXCLUDE= .git* $(SRC_ICON) screenshot*.png Makefile README.md \
 	copyclipperrc *.py *.pyc
 
 JSON_FILES = manifest.json
-JS_FILES = background.js options.js
+JS_FILES = background.js options.js popup.js sendto.js
 
 space :=
 space +=
@@ -15,9 +15,8 @@ build: setup $(wildcard **/*) $(ICONS) $(JSON_FILES) $(JS_FILES)
 	dirname=$(shell basename $(PWD)); zip -r $(ZIP_EXCLUDE_FLAGS) dist/$$dirname.zip . $(ZIP_INCLUDES)
 
 clean:
-	rm -fv $(JSON_FILES) $(JS_FILES) $(ICONS)
+	rm -fv $(ICONS)
 	rm -rf node_modules/ vendor/ dist/
-	rm -fv icon[1-9][0-9]*.png
 	dirname=$(shell basename $(PWD)); rm -fv dist/$$dirname.zip
 
 icon%.png: $(SRC_ICON)
@@ -34,6 +33,3 @@ python:
 	  sudo -H easy_install -U pyobjc-core; sudo -H easy_install -U pyobjc; fi
 	if [ ! -r ~/.copyclipperrc ]; then D="$$PWD/copyclipperrc"; cd ~; ln -s "$$D" .copyclipperrc; fi
 	python -m unittest -f test_copyclipper
-
-tests:
-	sniffer
