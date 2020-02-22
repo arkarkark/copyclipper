@@ -2,7 +2,7 @@ SRC_ICON = copyclipper.png
 ICONS=icon128.png icon48.png icon16.png
 ZIP_EXCLUDE= .git* $(SRC_ICON) screenshot*.png Makefile README.md \
 	node_modules/* package.json dist/* .DS_Store *.xcf \
-	copyclipperrc *.py
+	copyclipperrc *.py *.pyc
 
 JSON_FILES = manifest.json
 JS_FILES = background.js options.js

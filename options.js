@@ -3,6 +3,7 @@
 /* global chrome */
 
 var ccoptions = {}
+
 var copyclipper = chrome.extension.getBackgroundPage().copyclipper
 
 // TODO(ark) allow subscriptions to sets of patterns

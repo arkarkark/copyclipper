@@ -23,24 +23,33 @@ copyclipper.DEFAULT_REGEXES = [
   '# Add all new patterns above this line.',
   '# Begin Default Patterns',
   '# If you don\'t want one of thise patterns to execute, add a # at the start',
-  '!^(http.*)\\?feat=directlink$!$1!', // picasaweb
-  '!^(http.*)\\?source=rss$!$1!', // sentinel
+  '!\\?(fbclid|ref|authType)=.*!!',
+  '!\\?filter=following.*!!',
+  '!\\?fromListing=listing!!',
+  '!\\?from_search=.*!!',
+  '!\\?mt=[0-9]+!!',
+  '!^(http.*)&referer=brief_results$!$1!',
   '!^(http.*)\\?_r=1$!$1!', // nytimes
+  '!^(http.*)\\?feat=directlink$!$1!', // picasaweb
+  '!^(http.*)\\?lang=en$!$1!',
+  '!^(http.*)\\?source=rss$!$1!', // sentinel
   '!^(http.*)\\?utm_source=[^#]*!$1!', // GA
-  '!^http.*[/\\.]youtube\\..*[&?]v=([^&]*).*?(#t=.*)?$!https://youtu.be/$1$2!',
-  '!^https?([a-z0-9:/.]*[/\\.]amazon\\.[^/]*/' +
-    '(gp/product|([^/]*/)?dp)/[^/]*).*$!' +
-    'https$1!',
-  '!^http.*google.*search.*[?&]tbm=isch&q=([^&]*).*$!' +
-    'https://www.google.com/search?tbm=isch&q=$1!',
-  '!^(https?://www.ebay.com/itm/[^/]+/\\d+).*!$1!',
+  '!^(http.*?)[&?]utm_(source|medium|campaign)=[^#]*!$1!',
+  '!^(http.*imdb.com.*?)/?\\?.*!$1!',
+  '!^(https://www.aliexpress.com/item).*(/\\d+\\.html)\\?.*!$1$2!',
+  '!^(https://www.ebay.com/itm).*(/\\d+)\\?.*!$1/_$2!',
+  '!^(https://www.homedepot.com/p).*(/\\d+)(\\?.*)?!$1/_$2!',
+  '!^http.*google.*search.*[?&]tbm=isch&q=([^&]*).*$!https://www.google.com/search?tbm=isch&q=$1!',
+  '!^http.*youtube.*[&?]v=([^&]*).*?(#t=.*)?$!https://youtu.be/$1$2!',
+  '!^https://code.google.com/p/chromium/issues/detail\\?([^&]*&)*id=(\\d+).*$!http://crbug.com/$2!',
+  '!^https?://([a-z0-9.]*amazon[^/]*/(gp/product|([^/]*/)?[dg]p)/[^/?]*).*$!https://$1!',
   '# Uncomment this next line (remove the #) if you feel brave!',
-  '#!/index\\.(php|s?html|asp)$!/!',
+  '#!/index\\.(php|s?html?|asp)$!/!',
   '# End Default Patterns'
 ]
 
-/** How long to wait before the Chrome notification disappears. */
-copyclipper.NOTIFICATION_TIMEOUT = 4000
+/** How long to wait before the Chrome notification disappears, in milliseconds. */
+copyclipper.NOTIFICATION_TIMEOUT = 8000
 
 /** Is an object empty.
  * @param {Object} obj the object to check.
@@ -225,18 +234,23 @@ copyclipper.createNotification = function () {
       copyclipper.clipboardValue.length) {
     desciption = '\n\nUnclipped from:\n'
   }
+  message = (copyclipper.clipboardValue +
+                                          desciption +
+                                          copyclipper.clipboardValueOriginal)
+  buttons = [{ title: 'Undo' }]
+  copyclipper.showNotification(message, buttons)
+}
 
+copyclipper.showNotification = function (message, buttons) {
   copyclipper.clearNotifications()
 
   chrome.notifications.create('',
     {
       type: 'basic',
       title: 'Copyclipper',
-      message: (copyclipper.clipboardValue +
-                                          desciption +
-                                          copyclipper.clipboardValueOriginal),
+      message: message,
       iconUrl: 'icon48.png',
-      buttons: [{ title: 'Undo' }]
+      buttons: buttons,
     },
     function (notificationId) {})
 
@@ -262,6 +276,27 @@ copyclipper.notificationButtonClicked = function (notificationId, buttonIndex) {
   copyclipper.createNotification()
 }
 
+copyclipper.remoteSetClipboard = function (newValue, from) {
+  copyclipper.clipboardValueOriginal = copyclipper.clipboardValue = newValue
+  copyclipper.setClipboardContents(newValue)
+  message = "Received clipboard"
+  if (from) {
+    message = message + " from " + from
+  }
+  copyclipper.showNotification(message, [])
+}
+
 // handlers for notification clicks
 chrome.notifications.onButtonClicked.addListener(
   copyclipper.notificationButtonClicked)
+
+chrome.storage.onChanged.addListener(function(changed, area) {
+  if (area != "sync") {
+    console.log('not sync area!:' + area)
+    return
+  }
+  if (changed.regexes !== undefined) {
+    console.log('regexes changed')
+    copyclipper.restoreRegexes()
+  }
+})
