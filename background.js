@@ -234,10 +234,8 @@ copyclipper.createNotification = function () {
       copyclipper.clipboardValue.length) {
     desciption = '\n\nUnclipped from:\n'
   }
-  message = (copyclipper.clipboardValue +
-                                          desciption +
-                                          copyclipper.clipboardValueOriginal)
-  buttons = [{ title: 'Undo' }]
+  const message = (copyclipper.clipboardValue + desciption + copyclipper.clipboardValueOriginal)
+  const buttons = [{ title: 'Undo' }]
   copyclipper.showNotification(message, buttons)
 }
 
@@ -250,7 +248,7 @@ copyclipper.showNotification = function (message, buttons) {
       title: 'Copyclipper',
       message: message,
       iconUrl: 'icon48.png',
-      buttons: buttons,
+      buttons: buttons
     },
     function (notificationId) {})
 
@@ -279,9 +277,9 @@ copyclipper.notificationButtonClicked = function (notificationId, buttonIndex) {
 copyclipper.remoteSetClipboard = function (newValue, from) {
   copyclipper.clipboardValueOriginal = copyclipper.clipboardValue = newValue
   copyclipper.setClipboardContents(newValue)
-  message = "Received clipboard"
+  let message = 'Received clipboard'
   if (from) {
-    message = message + " from " + from
+    message = message + ' from ' + from
   }
   copyclipper.showNotification(message, [])
 }
@@ -290,12 +288,8 @@ copyclipper.remoteSetClipboard = function (newValue, from) {
 chrome.notifications.onButtonClicked.addListener(
   copyclipper.notificationButtonClicked)
 
-chrome.storage.onChanged.addListener(function(changed, area) {
-  if (area != "sync") {
-    console.log('not sync area!:' + area)
-    return
-  }
-  if (changed.regexes !== undefined) {
+chrome.storage.onChanged.addListener(function (changed, area) {
+  if (area === 'sync' && changed.regexes) {
     console.log('regexes changed')
     copyclipper.restoreRegexes()
   }

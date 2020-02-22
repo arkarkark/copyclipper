@@ -1,8 +1,33 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <style>
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    padding: 10px 0;
+}
+
+button {
+    width: 100%;
+    padding: 5px;
+}
+
+button:hover {
+    background: blue;
+    color: white;
+    cursor: pointer;
+}
+    </style>
+  </head>
   <body>
-    Send to:
-    <ul id="devices"></ul>
+    <nobr>Send clipboard to:</nobr>
+    <ul id="devices" class="dropdown"></ul>
     <script type="text/javascript" src="popup.js"></script>
   </body>
 </html>
