@@ -43,6 +43,7 @@ copyclipper.DEFAULT_REGEXES = [
   '!^http.*youtube.*[&?]v=([^&]*).*?(#t=.*)?$!https://youtu.be/$1$2!',
   '!^https://code.google.com/p/chromium/issues/detail\\?([^&]*&)*id=(\\d+).*$!http://crbug.com/$2!',
   '!^https?://([a-z0-9.]*amazon[^/]*/(gp/product|([^/]*/)?[dg]p)/[^/?]*).*$!https://$1!',
+  '!^https://[^/]*\\.google\\.[^/]*/url\\?q=([^&]*).*!$1!u',
   '# Uncomment this next line (remove the #) if you feel brave!',
   '#!/index\\.(php|s?html?|asp)$!/!',
   '# End Default Patterns'
@@ -132,7 +133,12 @@ copyclipper.decodeRegexLine = function (regexLine) {
     }
   }
   if (parts.length === 3) {
-    return [RegExp(parts[0], parts[2]), parts[1]]
+    var newopts = parts[2].replace("u", '')
+    var options = {}
+    if (newopts != parts[2]) {
+      options.urlDecode = true
+    }
+    return [RegExp(parts[0], newopts), parts[1], options]
   }
   return null
 }
@@ -161,12 +167,19 @@ copyclipper.setClipboardContents = function (val) {
   copyclipper.clipboardValue = val
 }
 
-/** Go through all our patterns and sear/replace on val. */
+/** Go through all our patterns and search/replace on val. */
 copyclipper.replace = function (val, patterns) {
-  for (var i = 0; i < patterns.length; i++) {
-    var search = patterns[i][0]
-    var replace = patterns[i][1]
-    val = val.replace(search, replace)
+  if (patterns && patterns.length) {
+    for (var i = 0; i < patterns.length; i++) {
+      var search = patterns[i][0]
+      var replace = patterns[i][1]
+      var {urlDecode} = patterns[i][2] || {}
+      var newval = val.replace(search, replace)
+      if (newval != val && urlDecode && newval.search(/\?[^=%]+%3D/)) {
+        newval = copyclipper.replace(decodeURIComponent(newval))
+      }
+      val = newval
+    }
   }
   return val
 }
