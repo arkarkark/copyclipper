@@ -17,7 +17,7 @@ chrome.storage.sync.get('devices', function (reply) {
       if (reply.devices[dev.deviceName].publicKey) {
         const li = document.createElement('li')
         const name = dev.deviceName
-        const button = document.createElement("button")
+        const button = document.createElement('button')
         button.innerHTML = name
         li.appendChild(button)
         activate(li, name)

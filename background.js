@@ -133,9 +133,9 @@ copyclipper.decodeRegexLine = function (regexLine) {
     }
   }
   if (parts.length === 3) {
-    var newopts = parts[2].replace("u", '')
+    var newopts = parts[2].replace('u', '')
     var options = {}
-    if (newopts != parts[2]) {
+    if (newopts !== parts[2]) {
       options.urlDecode = true
     }
     return [RegExp(parts[0], newopts), parts[1], options]
@@ -173,9 +173,9 @@ copyclipper.replace = function (val, patterns) {
     for (var i = 0; i < patterns.length; i++) {
       var search = patterns[i][0]
       var replace = patterns[i][1]
-      var {urlDecode} = patterns[i][2] || {}
+      var { urlDecode } = patterns[i][2] || {}
       var newval = val.replace(search, replace)
-      if (newval != val && urlDecode && newval.search(/\?[^=%]+%3D/)) {
+      if (newval !== val && urlDecode && newval.search(/\?[^=%]+%3D/)) {
         newval = copyclipper.replace(decodeURIComponent(newval))
       }
       val = newval
